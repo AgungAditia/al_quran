@@ -9,7 +9,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
           'Al - Quran',
@@ -52,87 +54,43 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               child: Stack(
+                alignment: Alignment.centerLeft,
                 children: [
                   Positioned(
                     bottom: 0,
                     child: SvgPicture.asset('assets/images/vector1.svg'),
                   ),
+                  SvgPicture.asset(
+                    'assets/images/alquran.svg',
+                    alignment: Alignment.bottomRight,
+                  ),
                   Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                      vertical: 55,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Last Read',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const SizedBox(height: 11),
-                              Text(
-                                'ةحتافلا',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Text(
-                                'Ayat no. 1',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w300,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              ElevatedButton(
-                                style: ButtonStyle(
-                                  fixedSize: const MaterialStatePropertyAll(
-                                    Size(115, 31),
-                                  ),
-                                  backgroundColor:
-                                      const MaterialStatePropertyAll(
-                                    Color(0XFFFAF6EB),
-                                  ),
-                                  shape: MaterialStatePropertyAll(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      'Continue',
-                                      style: GoogleFonts.montserrat(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    const Icon(
-                                      Icons.arrow_right_alt,
-                                      color: Colors.black,
-                                    )
-                                  ],
-                                ),
-                                onPressed: () {},
-                              )
-                            ],
+                        Text(
+                          'Assalamualaikum',
+                          style: GoogleFonts.montserrat(
+                            fontSize: 17,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
-                        Expanded(
-                            child:
-                                SvgPicture.asset('assets/images/alquran.svg')),
+                        Text(
+                          'Hanif Azizah',
+                          style: GoogleFonts.montserrat(
+                            fontSize: 24,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
