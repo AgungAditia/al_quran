@@ -17,7 +17,7 @@ class DetailSuratPage extends StatelessWidget {
           },
           icon: const Icon(
             Icons.arrow_back,
-            color: Color(0XFF8789A3),
+            color: Color(0XFF292D32),
           ),
         ),
         backgroundColor: Colors.white,

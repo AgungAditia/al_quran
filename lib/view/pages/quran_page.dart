@@ -1,11 +1,26 @@
+import 'package:al_quran/models/daftar_surat_model.dart';
 import 'package:al_quran/view/pages/detail_surat_page.dart';
+import 'package:al_quran/view_model/provider/daftar_surat_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
+import 'package:provider/provider.dart';
 
-class QuranPage extends StatelessWidget {
+class QuranPage extends StatefulWidget {
   const QuranPage({super.key});
+
+  @override
+  State<QuranPage> createState() => _QuranPageState();
+}
+
+class _QuranPageState extends State<QuranPage> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() =>
+        Provider.of<SuratProvider>(context, listen: false).fetchDaftarSurat());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +28,15 @@ class QuranPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Color(0XFF292D32),
+            ),
+          ),
           elevation: 0,
           backgroundColor: Colors.white,
           title: Text(
@@ -164,99 +188,116 @@ class QuranPage extends StatelessWidget {
                 views: [
                   Padding(
                     padding: const EdgeInsets.all(26.0),
-                    child: ListView(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const DetailSuratPage(),
-                              ),
-                            );
-                          },
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0XFF87D1A4),
-                                      borderRadius: BorderRadius.circular(9),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        '1',
-                                        style: GoogleFonts.montserrat(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
+                    child: Consumer<SuratProvider>(
+                      builder: (context, daftarSuratProvider, child) {
+                        if (daftarSuratProvider.requestState ==
+                            RequestState.loading) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (daftarSuratProvider.requestState ==
+                            RequestState.loaded) {}
+                        return ListView.builder(
+                          itemCount: daftarSuratProvider.daftarSurat.length,
+                          itemBuilder: (context, index) {
+                            final surat =
+                                daftarSuratProvider.daftarSurat[index];
+                            return InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const DetailSuratPage(),
                                   ),
-                                  const SizedBox(width: 20),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Al-Faatiha',
-                                          style: GoogleFonts.montserrat(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
+                                );
+                              },
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        width: 40,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0XFF87D1A4),
+                                          borderRadius:
+                                              BorderRadius.circular(9),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            surat.nomor.toString(),
+                                            style: GoogleFonts.montserrat(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
-                                        Row(
+                                      ),
+                                      const SizedBox(width: 20),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              'Mekah ',
+                                              surat.namaLatin,
                                               style: GoogleFonts.montserrat(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
                                               ),
                                             ),
-                                            const Icon(
-                                              Icons.circle,
-                                              size: 6,
-                                              color: Color(0XFFBBC4CE),
-                                            ),
-                                            const SizedBox(width: 5),
-                                            Text(
-                                              '7 Verses',
-                                              style: GoogleFonts.montserrat(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
-                                              ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  tempatTurunValues.reverse[
+                                                      surat.tempatTurun]!,
+                                                  style: GoogleFonts.montserrat(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                                const Icon(
+                                                  Icons.circle,
+                                                  size: 6,
+                                                  color: Color(0XFFBBC4CE),
+                                                ),
+                                                const SizedBox(width: 5),
+                                                Text(
+                                                  '${surat.jumlahAyat} Verses',
+                                                  style: GoogleFonts.montserrat(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      Text(
+                                        surat.nama,
+                                        style: GoogleFonts.montserrat(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0XFF076C58),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    'ةحتافلا',
-                                    style: GoogleFonts.montserrat(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(0XFF076C58),
-                                    ),
+                                  const SizedBox(height: 10),
+                                  const Divider(
+                                    color: Color(0XFFD9D8D8),
+                                    thickness: 1,
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 10),
-                              const Divider(
-                                color: Color(0XFFD9D8D8),
-                                thickness: 1,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                            );
+                          },
+                        );
+                      },
                     ),
                   ),
                   Container(color: Colors.green),
